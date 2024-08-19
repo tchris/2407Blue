@@ -13,7 +13,7 @@ class Ammo:
         )
         # Create a cursor object to interact with the database
         cursor = connection.cursor()
-        query = "SELECT * FROM `Ammunition` WHERE `Cartridge` LIKE " + AmmoType
+        query = "SELECT * FROM `Ammunition 2.0` WHERE `Name` LIKE " + AmmoType
         # Execute a query
         cursor.execute(query)
         # Fetch the results
