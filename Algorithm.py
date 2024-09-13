@@ -19,7 +19,7 @@ class Bullet:
         self.BallisticsCoefficient = float(BallisticsCoefficient)
         self.scopeheight = float(scopeheight)
         self.DropToZero = 0
-        
+ ###DROP###       
     #calculate air density = p in kg/m^3
     def AirPressure(self):
         h = (self.ShooterAltitude + self.TargetAltitude)/6.56167979
@@ -145,6 +145,10 @@ class Bullet:
         angle = math.atan(dropM/DistanceM)
         return angle
     #find drop from zero
+###DROP###
+###WINDAGE###
+
+###WINDAGE###
 
 
 
