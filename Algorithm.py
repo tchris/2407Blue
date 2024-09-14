@@ -147,7 +147,34 @@ class Bullet:
     #find drop from zero
 ###DROP###
 ###WINDAGE###
+    def WindageAngle(self):
+        windDirection = self.WindDirection
+        aimDirection = self.AimDirection
+        relativeDirection = windDirection - aimDirection
+        if relativeDirection <= -180:
+            relativeDirection += 360
+        elif relativeDirection > 180:
+            relativeDirection -= 360
+        # if relativeDirection == -90 or relativeDirection == 90:
+        #     relativeDirection += 1
+        relativeDirection = relativeDirection * 3.1415 / 180 #degrees to rads
+        # print("direction in rads: ", relativeDirection)
 
+        return relativeDirection
+    def WindCorrectionMILs(self):
+        DistanceToTargetYDs = (self.DistanceToTarget) / 3 #feet to yards
+        angle = self.WindageAngle()
+        crosswind = (math.atan(self.WindageAngle()) * self.Windspeed)#mph
+        k=18
+        WindageMOA = ((2 * (DistanceToTargetYDs / 100) * crosswind) / (2 * k * self.BallisticsCoefficient))/ 2
+        WindageMILs = WindageMOA / 3.43775 #MOA to MILs
+        output = round(WindageMILs, 1) - 0.1
+        if DistanceToTargetYDs <= 102:
+            output += .1
+        return output
+        # print("crosswinds in yards/s: ", math.tan(self.WindageAngle()) * (self.Windspeed * 0.488888889))
+       
+ 
 ###WINDAGE###
 
 
