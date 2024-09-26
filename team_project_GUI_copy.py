@@ -147,9 +147,10 @@ distance_unit_var = tk.StringVar()
 distance_unit_dropdown = ttk.Combobox(main_frame, textvariable=distance_unit_var, values=["meters", "yards"], state="readonly")
 distance_unit_dropdown.grid(row=10, column=2, sticky="ew", padx=10, pady=5)
 
+root.mainloop()
 # Submit Button
 submit_button = tk.Button(main_frame, text="Submit", command=store_text)
 submit_button.grid(row=11, column=2, pady=20, padx=10, sticky="e")  # Align button with the last column (Distance [2])
 
 # Start the Tkinter event loop
-root.mainloop()
+
