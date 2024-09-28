@@ -1,1 +1,4 @@
 mysql.connector
+math
+reportlab
+tkinter
