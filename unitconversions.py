@@ -31,7 +31,12 @@ def convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_
     # Clear previous error messages
     clear_error_section()
     
-    export_file_name = weapon_name
+    if "/" in weapon_name:
+        error_section.append("/")
+    elif "\\" in weapon_name:
+        error_section.append("\\")
+    else:
+        export_file_name = weapon_name
 
     #ammo
     new_ammunition = f"'{ammunition}'"
@@ -113,7 +118,7 @@ def convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_
     DropMils = true.DropinMILs()
     WindageMils= true.WindCorrectionMILs()
 
-    return DropMils, WindageMils
+    return export_file_name, DropMils, WindageMils
     # If there are any invalid inputs, display an error message
     # if error_section != []:
     #     return error()

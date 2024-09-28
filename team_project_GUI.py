@@ -8,6 +8,7 @@ Created on Sun Sep  8 13:01:43 2024
 import tkinter as tk
 from tkinter import ttk
 from unitconversions import convert_and_run, error, error_section
+from exportFunction import create_pdf
 
 # Function to store text from all text boxes and dropdowns
 def store_text():
@@ -47,15 +48,17 @@ def store_text():
     
     
     try:
-        DropMils, WindageMils = convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit)
+        export_file_name, DropMils, WindageMils = convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit)
         print("DropMils: ", DropMils) #replace with output
         print("WindageMils: ", WindageMils) #replace with output
     except TypeError:
         errors = error()
         print(errors) #replace with output
     
+    export = "yes" # replace with button
+    if export == "yes":
+        create_pdf(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit, DropMils, WindageMils)  
 
-    # print("Calling Output Page Function", output)  # Placeholder until the function is created 
 
 # Create the main window
 root = tk.Tk()
