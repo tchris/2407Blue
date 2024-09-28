@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import ttk
 from unitconversions import convert_and_run, error, error_section
 from exportFunction import create_pdf
+from ammolist import lst
 
 # Function to store text from all text boxes and dropdowns
 def store_text():
@@ -59,6 +60,17 @@ def store_text():
     if export == "yes":
         create_pdf(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit, DropMils, WindageMils)  
 
+def search(event):
+    value = event.widget.get()
+    if value == '':
+        ammunition_dropdown['values'] = lst
+    else:
+        data = []
+        for item in lst:
+            if value.lower() in item.lower():
+                data.append(item)
+            ammunition_dropdown['values'] = data
+
 
 # Create the main window
 root = tk.Tk()
@@ -91,12 +103,18 @@ weapon_name_label.grid(row=1, column=0, sticky="w", padx=10, pady=5)
 weapon_name_entry = tk.Entry(main_frame)
 weapon_name_entry.grid(row=1, column=1, columnspan=2, sticky="ew", padx=10, pady=5)
 
-# Ammunition (Dropdown)
+#ammo dropdown
+
 ammunition_label = tk.Label(main_frame, text="Ammunition:")
 ammunition_label.grid(row=2, column=0, sticky="w", padx=10, pady=5)
 ammunition_var = tk.StringVar()
-ammunition_dropdown = ttk.Combobox(main_frame, textvariable=ammunition_var, values=["5.56x45mm NATO", ".308 Winchester", ".50 BMG", "12 gauge"], state="readonly")
+ammunition_dropdown = ttk.Combobox(main_frame, textvariable=ammunition_var, values=lst)
+ammunition_dropdown.set('Search')
+ammunition_dropdown.bind('<KeyRelease>', search)  # Make sure to use '<KeyRelease>' with angle brackets
+
+# Use grid for the dropdown
 ammunition_dropdown.grid(row=2, column=1, columnspan=2, sticky="ew", padx=10, pady=5)
+
 
 # Shooting Direction
 shooting_direction_label = tk.Label(main_frame, text="Shooting Direction:")
