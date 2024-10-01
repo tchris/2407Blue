@@ -49,7 +49,7 @@ def store_text():
     
     
     try:
-        export_file_name, DropMils, WindageMils = convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit)
+        export_file_name, DropMils, WindageMils, VelocityatTarget, EnergyatTarget = convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit)
         print("DropMils: ", DropMils) #replace with output
         print("WindageMils: ", WindageMils) #replace with output
     except TypeError:

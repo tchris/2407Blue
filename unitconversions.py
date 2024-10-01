@@ -115,10 +115,14 @@ def convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_
             ActualDiameterIN,
             BallisticCoefficient)
     
-    DropMils = true.DropinMILs()
-    WindageMils= true.WindCorrectionMILs()
+    Output_DropMils = true.DropinMILs()
+    Output_WindageMils= true.WindCorrectionMILs()
+    Output_distancetoTargetft = new_distance
+    Output_VelocityatTargetfts = true.VelocityatImpact()
+    Output_EnergyatTargetlbsft = true.EnergyatImpact()
+    
 
-    return export_file_name, DropMils, WindageMils
+    return export_file_name, Output_DropMils, Output_WindageMils, Output_distancetoTargetft, Output_VelocityatTargetfts, Output_EnergyatTargetlbsft
     # If there are any invalid inputs, display an error message
     # if error_section != []:
     #     return error()

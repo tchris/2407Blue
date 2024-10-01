@@ -108,9 +108,8 @@ class Bullet:
         self.DistanceToTarget = Dist
         theta3 = theta2 - theta1
         DropAfterZero= math.tan(theta3) * (Dist) * 12 #feet to IN
-
-
         return DropAfterZero
+    
     #Correct according to Hornadys Calc aka Fudge the numbers
     def DropAverage(self):
         DropAVG = ((self.Drop() + self.DropAfterZero()) / 2)
@@ -180,8 +179,13 @@ class Bullet:
         return round(output, 1)
         # print("crosswinds in yards/s: ", math.tan(self.WindageAngle()) * (self.Windspeed * 0.488888889))
        
- 
+    
 ###WINDAGE###
 
-
+    def VelocityatImpact(self):
+        velocity = self.MuzzleVelocityFPS() - (self.TimeofFlight() * self.Deceleration()) #ft/s
+        return velocity
+    def EnergyatImpact(self):
+        energy = self.VelocityatImpact * self.Mass *0.00014286 #ft-lbs
+        return energy
 
