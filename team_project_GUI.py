@@ -8,8 +8,8 @@ Created on Sun Sep  8 13:01:43 2024
 import tkinter as tk
 from tkinter import ttk
 from unitconversions import convert_and_run, error, error_section
-from exportFunction import create_pdf
 from ammolist import lst
+from Output import OutputPage
 
 # Function to store text from all text boxes and dropdowns
 def store_text():
@@ -49,17 +49,15 @@ def store_text():
     
     
     try:
-        export_file_name, DropMils, WindageMils, VelocityatTarget, EnergyatTarget = convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit)
-        print("DropMils: ", DropMils) #replace with output
-        print("WindageMils: ", WindageMils) #replace with output
+        export_file_name, Output_DropMils, Output_WindageMils, Output_distancetoTargetft, Output_VelocityatTargetfts, Output_EnergyatTargetlbsft = convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit)
+        DropMils = Output_DropMils
+        WindageMils = Output_WindageMils
+        OutputPage(export_file_name, Output_DropMils, Output_WindageMils, Output_distancetoTargetft, Output_VelocityatTargetfts, Output_EnergyatTargetlbsft, weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit, DropMils, WindageMils)
     except TypeError:
         errors = error()
         print(errors) #replace with output
     
-    export = "yes" # replace with button
-    if export == "yes":
-        create_pdf(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit, DropMils, WindageMils)  
-
+    
 def search(event):
     value = event.widget.get()
     if value == '':

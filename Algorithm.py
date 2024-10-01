@@ -183,9 +183,9 @@ class Bullet:
 ###WINDAGE###
 
     def VelocityatImpact(self):
-        velocity = self.MuzzleVelocityFPS() - (self.TimeofFlight() * self.Deceleration()) #ft/s
+        velocity = self.MuzzleVelocityFPS - (self.TimeofFlight() * self.Deceleration()) #ft/s
         return velocity
     def EnergyatImpact(self):
-        energy = self.VelocityatImpact * self.Mass *0.00014286 #ft-lbs
+        energy = self.VelocityatImpact() * self.Mass() *0.00014286 #ft-lbs
         return energy
 
