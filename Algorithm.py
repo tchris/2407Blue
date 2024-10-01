@@ -121,6 +121,10 @@ class Bullet:
         DistanceToZeroYDs = (self.DistanceToZero) / 3 #feet to yards
 
         self.DropAfterZero()
+        if DistanceToTargetYDs == 0:
+            DistanceToTargetYDs = 1
+        if DistanceToZeroYDs == 0:
+            DistanceToZeroYDs = 1
         DroptoZeroMILS = ((self.DropToZero / 36) / DistanceToZeroYDs) * 1000 #IN to Yds
 
         if DistanceToTargetYDs < 1:
@@ -137,11 +141,13 @@ class Bullet:
         DropinMILs = DropinMILstotal - DroptoZeroMILS
 
 
-        return DropinMILstotal
+        return round(DropinMILstotal, 1)
     #find angle  of shot
     def Angle(self):
         dropM = self.Drop() * 0.0254 #in to Meters
         DistanceM = self.DistanceToTarget * 0.3048 #feet to meters
+        if DistanceM == 0:
+            DistanceM = 1
         angle = math.atan(dropM/DistanceM)
         return angle
     #find drop from zero
@@ -171,7 +177,7 @@ class Bullet:
         output = round(WindageMILs, 1) - 0.1
         if DistanceToTargetYDs <= 102:
             output += .1
-        return output
+        return round(output, 1)
         # print("crosswinds in yards/s: ", math.tan(self.WindageAngle()) * (self.Windspeed * 0.488888889))
        
  

@@ -1,1 +1,6 @@
 mysql.connector
+math
+reportlab
+tkinter
+
+python -m PyInstaller team_project_GUI.py --onefile --console --icon icon.ico --add-data "C:\Users\kaleb\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector;mysql\connector"
