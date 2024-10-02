@@ -1,15 +1,25 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Sep  8 13:01:43 2024
-
-@author: Josh
-"""
-
 import tkinter as tk
-from tkinter import ttk
-from unitconversions import convert_and_run, error, error_section
+from tkinter import ttk, messagebox
+from unitconversions import convert_and_run, error
 from ammolist import lst
 from Output import OutputPage
+
+# Function for the Submit button
+def submit_application():
+    store_text()
+
+# Function to validate numeric input
+def validate_numeric_input(value, field_name, min_value=None, max_value=None):
+    try:
+        num_value = float(value)
+        if min_value is not None and num_value < min_value:
+            raise ValueError
+        if max_value is not None and num_value > max_value:
+            raise ValueError
+        return True
+    except ValueError:
+        messagebox.showerror("Invalid Input", f"Please enter a valid input for all fields.")
+        return False
 
 # Function to store text from all text boxes and dropdowns
 def store_text():
@@ -17,7 +27,7 @@ def store_text():
     ammunition = ammunition_var.get()
     shooting_direction = shooting_direction_entry.get()
     humidity = humidity_entry.get()
-    wind_direction = wind_direction_var.get()
+    wind_direction = wind_direction_entry.get()
     wind_speed = wind_speed_entry.get()
     wind_speed_unit = wind_speed_unit_var.get()
     altitude = altitude_entry.get()
@@ -29,46 +39,50 @@ def store_text():
     distance = distance_entry.get()
     distance_unit = distance_unit_var.get()
 
-    output = (
-        weapon_name,
-        ammunition,
-        shooting_direction,
-        humidity,
-        wind_direction,
-        wind_speed,
-        wind_speed_unit,
-        altitude,
-        altitude_unit,
-        temperature,
-        temperature_unit,
-        zero_range,
-        zero_range_unit,
-        distance,
-        distance_unit
-    )
-    
-    
+    # Validate inputs
+    if not validate_numeric_input(humidity, "Humidity"):
+        return
+    if not validate_numeric_input(wind_direction, "Wind Direction", 0, 360):
+        return
+    if not validate_numeric_input(wind_speed, "Wind Speed"):
+        return
+    if not validate_numeric_input(altitude, "Altitude"):
+        return
+    if not validate_numeric_input(temperature, "Temperature"):
+        return
+    if not validate_numeric_input(zero_range, "Zero Range"):
+        return
+    if not validate_numeric_input(distance, "Distance"):
+        return
+
     try:
-        export_file_name, Output_DropMils, Output_WindageMils, Output_distancetoTargetft, Output_VelocityatTargetfts, Output_EnergyatTargetlbsft = convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit)
+        export_file_name, Output_DropMils, Output_WindageMils, Output_distancetoTargetft, Output_VelocityatTargetfts, Output_EnergyatTargetlbsft = convert_and_run(
+            weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, 
+            altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit
+        )
+        
+        # Pass values to the output page
         DropMils = Output_DropMils
         WindageMils = Output_WindageMils
-        OutputPage(export_file_name, Output_DropMils, Output_WindageMils, Output_distancetoTargetft, Output_VelocityatTargetfts, Output_EnergyatTargetlbsft, weapon_name, ammunition, shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, distance, distance_unit, DropMils, WindageMils)
-    except TypeError:
-        errors = error()
-        print(errors) #replace with output
-    
-    
+        OutputPage(export_file_name, DropMils, WindageMils, Output_distancetoTargetft, 
+                   Output_VelocityatTargetfts, Output_EnergyatTargetlbsft, weapon_name, ammunition, 
+                   shooting_direction, humidity, wind_direction, wind_speed, wind_speed_unit, 
+                   altitude, altitude_unit, temperature, temperature_unit, zero_range, zero_range_unit, 
+                   distance, distance_unit)
+
+    except TypeError as te:
+        messagebox.showerror("Calculation Error", f"An error occurred during the calculation: {te}")
+    except Exception as e:
+        messagebox.showerror("Unknown Error", f"An unknown error occurred: {e}")
+
+# Function to search ammunition list
 def search(event):
     value = event.widget.get()
     if value == '':
         ammunition_dropdown['values'] = lst
     else:
-        data = []
-        for item in lst:
-            if value.lower() in item.lower():
-                data.append(item)
-            ammunition_dropdown['values'] = data
-
+        data = [item for item in lst if value.lower() in item.lower()]
+        ammunition_dropdown['values'] = data
 
 # Create the main window
 root = tk.Tk()
@@ -82,7 +96,7 @@ main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 for i in range(3):
     main_frame.grid_columnconfigure(i, weight=1)
 
-# Create a Canvas for "Cool Guy Logo" 
+# Create a Canvas for "Cool Guy Logo"
 logo_canvas = tk.Canvas(main_frame, width=400, height=50, bg="white", relief="solid")
 logo_canvas.grid(row=0, column=0, columnspan=3, pady=10, sticky="ew")
 
@@ -101,18 +115,14 @@ weapon_name_label.grid(row=1, column=0, sticky="w", padx=10, pady=5)
 weapon_name_entry = tk.Entry(main_frame)
 weapon_name_entry.grid(row=1, column=1, columnspan=2, sticky="ew", padx=10, pady=5)
 
-#ammo dropdown
-
+# Ammunition Dropdown
 ammunition_label = tk.Label(main_frame, text="Ammunition:")
 ammunition_label.grid(row=2, column=0, sticky="w", padx=10, pady=5)
 ammunition_var = tk.StringVar()
 ammunition_dropdown = ttk.Combobox(main_frame, textvariable=ammunition_var, values=lst)
 ammunition_dropdown.set('Search')
-ammunition_dropdown.bind('<KeyRelease>', search)  # Make sure to use '<KeyRelease>' with angle brackets
-
-# Use grid for the dropdown
+ammunition_dropdown.bind('<KeyRelease>', search)
 ammunition_dropdown.grid(row=2, column=1, columnspan=2, sticky="ew", padx=10, pady=5)
-
 
 # Shooting Direction
 shooting_direction_label = tk.Label(main_frame, text="Shooting Direction:")
@@ -126,14 +136,13 @@ humidity_label.grid(row=4, column=0, sticky="w", padx=10, pady=5)
 humidity_entry = tk.Entry(main_frame)
 humidity_entry.grid(row=4, column=1, columnspan=2, sticky="ew", padx=10, pady=5)
 
-# Wind Direction (Dropdown)
-wind_direction_label = tk.Label(main_frame, text="Wind Direction:")
+# Wind Direction (Entry for Degrees 0°–360°)
+wind_direction_label = tk.Label(main_frame, text="Wind Direction (Degrees 0°–360°):")
 wind_direction_label.grid(row=5, column=0, sticky="w", padx=10, pady=5)
-wind_direction_var = tk.StringVar()
-wind_direction_dropdown = ttk.Combobox(main_frame, textvariable=wind_direction_var, values=["North", "East", "South", "West"], state="readonly")
-wind_direction_dropdown.grid(row=5, column=1, columnspan=2, sticky="ew", padx=10, pady=5)
+wind_direction_entry = tk.Entry(main_frame)
+wind_direction_entry.grid(row=5, column=1, columnspan=2, sticky="ew", padx=10, pady=5)
 
-# Wind Speed [1] [2]
+# Wind Speed
 wind_speed_label = tk.Label(main_frame, text="Wind Speed:")
 wind_speed_label.grid(row=6, column=0, sticky="w", padx=10, pady=5)
 wind_speed_entry = tk.Entry(main_frame)
@@ -170,7 +179,7 @@ zero_range_entry = tk.Entry(main_frame)
 zero_range_entry.grid(row=9, column=1, sticky="ew", padx=10, pady=5)
 
 zero_range_unit_var = tk.StringVar()
-zero_range_unit_dropdown = ttk.Combobox(main_frame, textvariable=zero_range_unit_var, values=["meters", "yards"], state="readonly")
+zero_range_unit_dropdown = ttk.Combobox(main_frame, textvariable=zero_range_unit_var, values=["meters", "feet"], state="readonly")
 zero_range_unit_dropdown.grid(row=9, column=2, sticky="ew", padx=10, pady=5)
 
 # Distance
@@ -180,12 +189,12 @@ distance_entry = tk.Entry(main_frame)
 distance_entry.grid(row=10, column=1, sticky="ew", padx=10, pady=5)
 
 distance_unit_var = tk.StringVar()
-distance_unit_dropdown = ttk.Combobox(main_frame, textvariable=distance_unit_var, values=["meters", "yards"], state="readonly")
+distance_unit_dropdown = ttk.Combobox(main_frame, textvariable=distance_unit_var, values=["meters", "feet"], state="readonly")
 distance_unit_dropdown.grid(row=10, column=2, sticky="ew", padx=10, pady=5)
 
 # Submit Button
-submit_button = tk.Button(main_frame, text="Submit", command=store_text)
-submit_button.grid(row=11, column=2, pady=20, padx=10, sticky="e")  # Align button with the last column (Distance [2])
+submit_button = tk.Button(main_frame, text="Submit", command=submit_application)
+submit_button.grid(row=11, column=2, pady=20, padx=10, sticky="e")  # Align button to the right
 
-# Start the Tkinter event loop
+# Start the GUI
 root.mainloop()
