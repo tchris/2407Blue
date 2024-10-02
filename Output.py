@@ -33,9 +33,9 @@ def OutputPage(export_file_name, Output_DropMils, Output_WindageMils,
     
     def target(event):
         targetvalue = event.widget.get()
-        if targetvalue == 'yards':
+        if targetvalue == 'ft':
             distance_to_target_entry.delete('1.0', 'end')
-            distance_to_target_entry.insert('end', f'{round(Output_distancetoTargetft / 3, 1)}')
+            distance_to_target_entry.insert('end', f'{round(Output_distancetoTargetft, 1)}')
         else:
             distance_to_target_entry.delete('1.0', 'end')
             distance_to_target_entry.insert('end', f'{round(Output_distancetoTargetft * 0.3048, 1)}')
@@ -58,7 +58,7 @@ def OutputPage(export_file_name, Output_DropMils, Output_WindageMils,
             energy_on_target_entry.delete('1.0', 'end')
             energy_on_target_entry.insert('end', f'{round(Output_EnergyatTargetlbsft * 1.35582, 1)}')
 
-    def export(event):
+    def export():
         create_pdf(weapon_name, ammunition, shooting_direction, humidity, 
                    wind_direction, wind_speed, wind_speed_unit, altitude, 
                    altitude_unit, temperature, temperature_unit, zero_range, 
@@ -120,13 +120,13 @@ def OutputPage(export_file_name, Output_DropMils, Output_WindageMils,
     distance_to_target_label = tk.Label(main_frame, text="Distance to Target:")
     distance_to_target_label.grid(row=3, column=0, sticky="w", padx=10, pady=5)
     distance_to_target_entry = tk.Text(main_frame, height=1, width=6)
-    distance_to_target_entry.insert('end', f'{round(Output_distancetoTargetft / 3, 1)}')
+    distance_to_target_entry.insert('end', f'{round(Output_distancetoTargetft, 1)}')
     distance_to_target_entry.grid(row=3, column=1, sticky="ew", padx=10, pady=5)
 
     distance_to_target_unit_var = tk.StringVar()
-    distance_to_target_unit_dropdown = ttk.Combobox(main_frame, textvariable=distance_to_target_unit_var, values=["yards", "meters"], state="readonly")
+    distance_to_target_unit_dropdown = ttk.Combobox(main_frame, textvariable=distance_to_target_unit_var, values=["ft", "meters"], state="readonly")
     distance_to_target_unit_dropdown.grid(row=3, column=2, sticky="ew", padx=10, pady=5)
-    distance_to_target_unit_dropdown.set('yards')
+    distance_to_target_unit_dropdown.set('ft')
     distance_to_target_unit_dropdown.bind('<<ComboboxSelected>>', target)
 
     # Velocity at Target

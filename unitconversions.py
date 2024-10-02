@@ -43,7 +43,7 @@ def convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_
     #Shooting Direction input validation
     new_shooting_direction = is_number(shooting_direction)
 
-    # new_wind_direction = is_number(wind_direction)                        Change after GUI fix
+    new_wind_direction = is_number(wind_direction)            
 
     #windspeed
     if wind_speed_unit == "mph":
@@ -79,7 +79,7 @@ def convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_
     
 
     #distance to target
-    if distance_unit == "yards":
+    if distance_unit == "ft":
         new_distance = is_number(distance) * 3 #yds to ft
     else:
         new_distance = is_number(distance) * 3.2808399 #m to ft
@@ -87,8 +87,6 @@ def convert_and_run(weapon_name, ammunition, shooting_direction, humidity, wind_
     
     scopeheight = 1.5
 
-    ###                                                                             place holder till gui is fixed
-    new_wind_direction = 90
 
 
 #call to DB
